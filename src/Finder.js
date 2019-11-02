@@ -1,5 +1,5 @@
 import React from 'react';
-import {Input, Button} from 'reactstrap';
+import {Input, Button, InputGroup} from 'reactstrap';
 
 class Finder extends React.Component {
 
@@ -11,26 +11,24 @@ class Finder extends React.Component {
     }
 
     handleChange(event) {
-        console.log(event.target.value);
         this.setState({text: event.target.value});
     }
 
     async handleFind() {
-        let text = this.state.text;
-        console.log(text);
-        const response = await fetch('/api/invertedindex?word='+text, {
-            mode: "no-cors"
-        });
-        console.log(response);
-        const body = await response.json();
-        console.log(body);
-        this.setState({texts: body});
+        await fetch('/api/invertedindex?word=' + this.state.text).then(async data => this.setState({texts: await data.json()}));
     }
 
     render() {
-        return <div>
-            <Input type="text" name="find" id="find" placeholder="with a placeholder" onChange={this.handleChange}/>
-            <Button onClick={this.handleFind} color="danger">Find</Button>
+        let texts = this.state.texts;
+        let list = texts.map(text => <li><p align="justify">{text.text}</p></li>)
+        return <div class="text">
+            <InputGroup>
+                <Input type="text" name="find" id="find" placeholder="with a placeholder" onChange={this.handleChange}/>
+                <Button className={'but'} onClick={this.handleFind} color="danger">Find</Button>
+            </InputGroup>
+            <ul>
+                {list}
+            </ul>
         </div>;
     }
 }
