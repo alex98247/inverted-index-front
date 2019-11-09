@@ -15,15 +15,17 @@ class Finder extends React.Component {
     }
 
     async handleFind() {
-        await fetch('/api/invertedindex?word=' + this.state.text).then(async data => this.setState({texts: await data.json()}));
+        let words = this.state.text.trim().replace(/\s/g, ',').replace(/\s/g, '');
+        await fetch('/api/invertedindex?words=' + words).then(async data => this.setState({texts: await data.json()}));
     }
 
     render() {
         let texts = this.state.texts;
         let list = texts.map(text => <li><p align="justify">{text.text}</p></li>)
         return <div class="text">
+            <h3>Простой поисковик</h3>
             <InputGroup>
-                <Input type="text" name="find" id="find" placeholder="with a placeholder" onChange={this.handleChange}/>
+                <Input type="text" name="find" id="find" placeholder="Введите слово, например IT" onChange={this.handleChange}/>
                 <Button className={'but'} onClick={this.handleFind} color="danger">Find</Button>
             </InputGroup>
             <ul>

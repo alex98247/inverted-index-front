@@ -35,8 +35,9 @@ class Adder extends React.Component {
     }
 
     render() {
-        return <div>
-            <Input type="textarea" name="text" id="text" onChange={this.handleChange}/>
+        return <div className="text">
+            <h1> Add text </h1>
+            <Input type="textarea"  style={{marginBottom: 10, height: 400}} name="text" id="text" onChange={this.handleChange}/>
             <Button onClick={this.handleAdd} color="danger">Add</Button>
         </div>;
     }
