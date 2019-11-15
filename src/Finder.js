@@ -1,7 +1,10 @@
 import React from 'react';
+// eslint-disable-next-line no-unused-vars
 import {Input, Button, InputGroup} from 'reactstrap';
 
 class Finder extends React.Component {
+
+    check = false;
 
     constructor(props) {
         super(props);
@@ -11,12 +14,18 @@ class Finder extends React.Component {
     }
 
     handleChange(event) {
+        console.log(this.check);
+        if(this.check===true) this.find(event.target.value);
         this.setState({text: event.target.value});
     }
 
-    async handleFind() {
-        let words = this.state.text.trim().replace(/\s/g, ',').replace(/\s/g, '');
+    async find(string){
+        let words = string.trim().replace(/\s/g, ',').replace(/\s/g, '');
         await fetch('/api/invertedindex?words=' + words).then(async data => this.setState({texts: await data.json()}));
+    }
+
+    async handleFind() {
+        await this.find(this.state.text);
     }
 
     render() {
@@ -28,6 +37,8 @@ class Finder extends React.Component {
                 <Input type="text" name="find" id="find" placeholder="Введите слово, например IT" onChange={this.handleChange}/>
                 <Button className={'but'} onClick={this.handleFind} color="danger">Find</Button>
             </InputGroup>
+                <Input type="checkbox" onChange={(e)=>{this.check=!this.check;}} type="checkbox" />{' '}
+                Поиск при изменении текста
             <ul>
                 {list}
             </ul>
