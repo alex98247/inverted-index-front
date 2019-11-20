@@ -24,7 +24,11 @@ class Finder extends React.Component {
         let words1 = string.trim().split(/\s/g);
         await fetch('/api/invertedindex?words=' + words).then(async data => {
             var texts = await data.json();
-            var trimText = texts.map(text=>text.text).flatMap(text => this.getMatches(words1[0], text).map(x => text.substring(x - 100, x + 100)));
+            var trimText = [];
+            for(var i=0; i<words1.length; i++) {
+                trimText = trimText.concat(texts.map(text => text.text)
+                    .flatMap(text => this.getMatches(words1[i], text).map(x => text.substring(x - 100, x + 100))));
+            }
             console.log(trimText);
             this.setState({texts: trimText})
         });
