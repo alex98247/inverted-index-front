@@ -25,6 +25,8 @@ class Finder extends React.Component {
         await fetch('/api/invertedindex?words=' + words).then(async data => {
             var texts = await data.json();
             var trimText = [];
+            console.log(texts)
+            console.log(words1)
             for(var i=0; i<words1.length; i++) {
                 trimText = trimText.concat(texts.map(text => text.text)
                     .flatMap(text => this.getMatches(words1[i], text).map(x => text.substring(x - 100, x + 100))));
@@ -39,7 +41,7 @@ class Finder extends React.Component {
     }
 
     getMatches(needle, haystack) {
-        var myRe = new RegExp("\\b" + needle + "\\b((?!\\W(?=\\w))|(?=\\s))", "gi"),
+        var myRe = new RegExp("(?:^|\\s)" + needle + "(?:^|\\s)((?!\\W(?=\\w))|(?=\\s))", "gi"),
             myArray, myResult = [];
         while ((myArray = myRe.exec(haystack)) !== null) {
             myResult.push(myArray.index);
